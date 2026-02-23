@@ -1,0 +1,1 @@
+{verse} [^{verse_number}] 

@@ -5,7 +5,7 @@ tags:
 aliases:
   - "{book} - {chapter_number}"
 ---
-[[{chapter_previous}|<--]] [[{book}]] {chapter_number}
+[[{book} - {chapter_previous}|<--]] [[{book}]] {chapter_number}
 
 Translation: [[bible - {version}|{version}]]
 

@@ -24,7 +24,6 @@ def replaceKey(content, key, value):
     return content.replace("{" + f"{key}" + "}", f"{value}")
 
 def replaceIndexData(content, book_list, indexData):
-    print(book_list)
     book_list_old = ""
     book_list_new = ""
     for x in range(len(indexData["books"])): 
@@ -47,27 +46,105 @@ def replaceIndexData(content, book_list, indexData):
                 ), 
                 "book_chapters", 
                 indexData["books"][x]["chapters"]
-            ) + "\n"
+            )
     book_list_full = book_list_old + book_list_new
     content = replaceKey(content, "book_list", book_list_full)
     content = replaceKey(content, "book_list_old", book_list_old)
     content = replaceKey(content, "book_list_new", book_list_new)
     content = replaceKey(content, "source", indexData["source"])
     content = replaceKey(content, "version", indexData["version"])
-    writeMarkdown(content, "index.md")
+    createFolderIfNotExist(lowerSpaceless(f"./output/{indexData["version"]}"))
+    writeMarkdown(content, "index.md", lowerSpaceless(indexData["version"]) + "/")
 
-def replaceBookData(variation, bookData):
-    pass
+def lowerSpaceless(string):
+    return string.replace(" ", "_").lower()
 
-def replaceChapterData(variation, bookData, chapterNumber):
-    pass
+def lookupBook(id, indexData):
+    if id < 0:
+        return "null"
+    elif id +1 > book_amount:
+        return "null"
+    return indexData["books"][id]["name"]
+
+def replaceBookData(book_variation, bookData, bookNumber, chapter_list, indexData, chapter_variation, verse_template):
+    content = book_variation.default
+    if bookNumber == 0:
+        content = book_variation.first
+    elif bookNumber + 1 == book_amount:
+        content = book_variation.last
+    chapter_list_exported = ""
+
+    for x in range(len(bookData["chapters"])): 
+        chapter_list_exported = chapter_list_exported + replaceKey(
+            replaceKey(
+                chapter_list, 
+                "book", 
+                bookData["book"]
+            ), 
+            "chapter_number", 
+            x+1
+        )
+
+    content = replaceKey(content, "chapter_list", chapter_list_exported)
+    content = replaceKey(content, "book", bookData["book"])
+    content = replaceKey(content, "book_previous", lookupBook(bookNumber - 1, indexData))
+    content = replaceKey(content, "book_next", lookupBook(bookNumber + 1, indexData))
+    content = replaceKey(content, "version", bookData["version"])
+    content = replaceKey(content, "book_chapters", len(bookData["chapters"]))
+    content = replaceKey(content, "old_new_testament", "old" if bookNumber + 1 <= old_testament_amount else "new")
+    content = replaceKey(content, "oude_nieuwe_testament", "oude" if bookNumber + 1 <= old_testament_amount else "nieuwe")
+    content = replaceKey(content, "source", bookData["source"])
+    createFolderIfNotExist(lowerSpaceless(f"./output/{bookData["version"]}/{bookData["book"]}"))
+    writeMarkdown(content, "index.md", lowerSpaceless(f"{bookData["version"]}/{bookData["book"]}/"))
+    for y in range(len(bookData["chapters"])):
+        replaceChapterData(chapter_variation, bookData, bookNumber, y+1, verse_template)
+
+def replaceChapterData(chapter_variation, bookData, bookNumber, chapterNumber, verse_template):
+    chapterData = bookData["chapters"][f"{chapterNumber}"]
+    verses = ""
+    content = chapter_variation.default
+    if chapterNumber == 0:
+        content = chapter_variation.first
+    elif chapterNumber + 1 == len(bookData["chapters"]):
+        content = chapter_variation.last
+    for x in range(len(chapterData)): 
+        verses = verses + replaceKey(
+            replaceKey(
+                replaceKey(
+                    verse_template, 
+                    "verse", 
+                    chapterData[x]["text"]
+                ), 
+                "book", 
+                bookData["book"]
+            ), 
+            "verse_number", 
+            chapterData[x]["verse"]
+        )
+    content = replaceKey(content, "chapter_text", verses)
+    content = replaceKey(content, "book", bookData["book"])
+    content = replaceKey(content, "chapter_previous", chapterNumber - 1)
+    content = replaceKey(content, "book_previous", lookupBook(bookNumber - 1, indexData))
+    content = replaceKey(content, "chapter_next", chapterNumber + 1)
+    content = replaceKey(content, "book_next", lookupBook(bookNumber + 1, indexData))
+    content = replaceKey(content, "version", bookData["version"])
+    content = replaceKey(content, "book_chapters", len(bookData["chapters"]))
+    content = replaceKey(content, "old_new_testament", "old" if bookNumber + 1 <= old_testament_amount else "new")
+    content = replaceKey(content, "oude_nieuwe_testament", "oude" if bookNumber + 1 <= old_testament_amount else "nieuwe")
+    content = replaceKey(content, "source", bookData["source"])
+
+    writeMarkdown(content, f"{bookData["book"]} - {chapterNumber}.md", lowerSpaceless(f"{bookData["version"]}/{bookData["book"]}/"))
+
+def createFolderIfNotExist(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 def readJsonFile(name, onError):
     my_file = Path("./bible/" + name)
     if my_file.is_file() == False:
         onError()
     else: 
-        with open('./bible/index.json') as f:
+        with open("./bible/" + name) as f:
             return json.load(f)
 
 def errorOut(text):
@@ -90,17 +167,35 @@ while True:
         print("That is not a valid input.")
 
 old_testament_amount = 39
+book_amount = 66
 
-newpath = "./output"
-if not os.path.exists(newpath):
-    os.makedirs(newpath)
-newpath = "./bible"
-if not os.path.exists(newpath):
-    os.makedirs(newpath)
+createFolderIfNotExist("./output")
+createFolderIfNotExist("./bible")
 
 indexData = readJsonFile("index.json", lambda: missingFile("index.json", "bible/"))
 index = readTemplate("index.md", lambda: missingFile("index.md", "templates"))
 newIndex = replaceIndexData(index, readTemplate("book_list.md", lambda: missingFile("book_list.md", "templates")), indexData)
 
-
+for x in range(len(indexData["books"])):
+    book = indexData["books"][x]
+    bookData = readJsonFile(book["filename"], lambda: missingFile(book["filename"], "bible/"))
+    print(bookData)
+    book_variation = Variation(
+        readTemplate("book_first.md", lambda: missingFile("book_first.md", "templates")),
+        readTemplate("book.md", lambda: missingFile("book.md", "templates")),
+        readTemplate("book_last.md", lambda: missingFile("book_last.md", "templates"))
+    )
+    chapter_variation = Variation(
+        readTemplate("chapter_first.md", lambda: missingFile("chapter_first.md", "templates")),
+        readTemplate("chapter.md", lambda: missingFile("chapter.md", "templates")),
+        readTemplate("chapter_last.md", lambda: missingFile("chapter_last.md", "templates"))
+    )
+    replaceBookData(book_variation,
+                        bookData, 
+                        x, 
+                        readTemplate("chapter_list.md", lambda: missingFile("chapter_list.md", "templates")), 
+                        indexData, 
+                        chapter_variation,
+                        readTemplate("verse.md", lambda: missingFile("verse.md", "templates"))
+                    )
 
