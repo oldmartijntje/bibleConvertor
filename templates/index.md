@@ -19,4 +19,3 @@ The bible has 66 books. These books have been rewritten many times.
 ### New Testament
 
 {book_list_new}
-
