@@ -1,4 +1,13 @@
+---
+translation: {version}
+tags:
+  - "#bible/chapter"
+aliases:
+  - "{book} - {chapter_number}"
+---
 [[{chapter_previous}|<--]] [[{book}]] {chapter_number} [[{chapter_next}|-->]]
+
+Translation: [[bible - {version}|{version}]]
 
 # {book} - {chapter_number}
 

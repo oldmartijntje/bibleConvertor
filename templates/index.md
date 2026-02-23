@@ -1,4 +1,12 @@
-# Bible
+---
+aliases:
+  - {version}
+tags:
+  - "#bible/index"
+---
+# Bible - {version}
+
+This bible translation has been downloaded from [{source}]({source}).
 
 The bible has 66 books. These books have been rewritten many times. 
 
