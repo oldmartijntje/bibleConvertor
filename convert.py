@@ -2,6 +2,12 @@ import os
 from pathlib import Path
 import json
 
+class Variation:
+    def __init__(self, first, default, last):
+        self.first = first
+        self.default = default
+        self.last = last
+
 def writeMarkdown(content, name, appendedPath = ""):
     with open(f"./output/{appendedPath}{name}", "w") as f:
         f.write(content)
@@ -49,6 +55,12 @@ def replaceIndexData(content, book_list, indexData):
     content = replaceKey(content, "source", indexData["source"])
     content = replaceKey(content, "version", indexData["version"])
     writeMarkdown(content, "index.md")
+
+def replaceBookData(variation, bookData):
+    pass
+
+def replaceChapterData(variation, bookData, chapterNumber):
+    pass
 
 def readJsonFile(name, onError):
     my_file = Path("./bible/" + name)
