@@ -183,12 +183,12 @@ while True:
     else:
         print("That is not a valid input.")
 
-old_testament_amount = 39
 
 createFolderIfNotExist("./output")
 createFolderIfNotExist("./bible")
 
 indexData = readJsonFile("index.json", lambda: missingFile("index.json", "bible/"))
+old_testament_amount = indexData.get("old_testament_amount", 39)
 book_amount = len(indexData["books"])
 index = readTemplate("index.md", lambda: missingFile("index.md", "templates"))
 newIndex = replaceIndexData(index, readTemplate("book_list.md", lambda: missingFile("book_list.md", "templates")), indexData)
