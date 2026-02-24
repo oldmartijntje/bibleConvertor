@@ -52,7 +52,7 @@ def replaceIndexData(content, book_list, indexData):
     content = replaceKey(content, "book_list", book_list_full)
     content = replaceKey(content, "book_list_old", book_list_old)
     content = replaceKey(content, "book_list_new", book_list_new)
-    content = replaceKey(content, "source", indexData["source"])
+    content = replaceKey(content, "source", httpsify(indexData["source"]))
     content = replaceKey(content, "version", indexData["version"])
     createFolderIfNotExist(lowerSpaceless(f"./output/{indexData["version"]}"))
     writeMarkdown(content, f"bible - {indexData["version"]}.md", lowerSpaceless(indexData["version"]) + "/")
@@ -96,11 +96,16 @@ def replaceBookData(book_variation, bookData, bookNumber, chapter_list, indexDat
     content = replaceKey(content, "book_chapters", len(bookData["chapters"]))
     content = replaceKey(content, "old_new_testament", "old" if bookNumber + 1 <= old_testament_amount else "new")
     content = replaceKey(content, "oude_nieuwe_testament", "oude" if bookNumber + 1 <= old_testament_amount else "nieuwe")
-    content = replaceKey(content, "source", bookData["source"])
+    content = replaceKey(content, "source", httpsify(bookData["source"]))
     createFolderIfNotExist(lowerSpaceless(f"./output/{bookData["version"]}/{bookData["book"]}"))
     writeMarkdown(content, f"{bookData["book"]}.md", lowerSpaceless(f"{bookData["version"]}/{bookData["book"]}/"))
     for y in range(len(bookData["chapters"])):
         replaceChapterData(chapter_variation, bookData, bookNumber, y+1, verse_template)
+
+def httpsify(link):
+    if "http" not in link:
+        link = f"https://{link}"
+    return link
 
 def replaceChapterData(chapter_variation, bookData, bookNumber, chapterNumber, verse_template):
     chapterData = bookData["chapters"][f"{chapterNumber}"]
@@ -137,7 +142,7 @@ def replaceChapterData(chapter_variation, bookData, bookNumber, chapterNumber, v
     content = replaceKey(content, "book_chapters", len(bookData["chapters"]))
     content = replaceKey(content, "old_new_testament", "old" if bookNumber + 1 <= old_testament_amount else "new")
     content = replaceKey(content, "oude_nieuwe_testament", "oude" if bookNumber + 1 <= old_testament_amount else "nieuwe")
-    content = replaceKey(content, "source", bookData["source"])
+    content = replaceKey(content, "source", httpsify(bookData["source"]))
 
     writeMarkdown(content, f"{bookData["book"]} - {chapterNumber}.md", lowerSpaceless(f"{bookData["version"]}/{bookData["book"]}/"))
 

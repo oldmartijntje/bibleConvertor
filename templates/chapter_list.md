@@ -1,1 +1,1 @@
-- {book} [[{book} - {chapter_number}|{chapter_number}]]
+- {book} [[{book} - {chapter_number}|chapter {chapter_number}]]
