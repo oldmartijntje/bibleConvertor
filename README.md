@@ -34,8 +34,11 @@ The `{book_list}` will be formatted in the way you customize `book_list.md`.
 #### Book Templates (`book.md`, `book_first.md`, `book_last.md`)
 Pages for each individual bible book. Available variables:
 - `{book}`: The name of the book (e.g., Genesis, Matthew)
+- `{book_lower}`: The book name in lowercase with spaces replaced by underscores (e.g., genesis, 1_samuel)
 - `{book_previous}`: The name of the previous book (or "null" if first book)
+- `{book_previous_lower}`: The previous book name in lowercase with spaces replaced by underscores
 - `{book_next}`: The name of the next book (or "null" if last book)
+- `{book_next_lower}`: The next book name in lowercase with spaces replaced by underscores
 - `{version}`: The bible translation version name
 - `{source}`: The source/URL where the bible data came from
 - `{book_chapters}`: The number of chapters in this book
@@ -50,10 +53,13 @@ The `{chapter_list}` will be formatted in the way you customize `chapter_list.md
 Pages for each chapter within a book. Available variables:
 - `{chapter_number}`: The chapter number (e.g., 1, 2, 3)
 - `{book}`: The name of the book this chapter belongs to
+- `{book_lower}`: The book name in lowercase with spaces replaced by underscores (e.g., genesis, 1_samuel)
 - `{chapter_previous}`: The previous chapter number (or 0 if first chapter)
 - `{chapter_next}`: The next chapter number (or higher than max if last chapter)
 - `{book_previous}`: The name of the previous book (or "null" if in first book)
+- `{book_previous_lower}`: The previous book name in lowercase with spaces replaced by underscores
 - `{book_next}`: The name of the next book (or "null" if in last book)
+- `{book_next_lower}`: The next book name in lowercase with spaces replaced by underscores
 - `{version}`: The bible translation version name
 - `{source}`: The source/URL where the bible data came from
 - `{book_chapters}`: The total number of chapters in this book

@@ -4,7 +4,7 @@ aliases:
   - "{book} - {version}"
 tags:
   - "#bible/type/book"
-  - "#bible/book/{book}"
+  - "#bible/book/{book_lower}"
 ---
 [[{book_previous}|<--]] {book}
 
