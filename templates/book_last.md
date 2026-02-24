@@ -3,7 +3,8 @@ translation: {version}
 aliases:
   - "{book} - {version}"
 tags:
-  - "#bible/book"
+  - "#bible/type/book"
+  - "#bible/book/{book}"
 ---
 [[{book_previous}|<--]] {book}
 

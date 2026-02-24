@@ -19,6 +19,9 @@ You can convert your bible.json into your personalised markdown format by editin
 
 Each template file supports different variables depending on where that content is used. Variables are referenced using curly braces, e.g., `{variable_name}`.
 
+The templates are setup by default to work with [Obsidian](https://obsidian.md/). The templates are also designed with the possability to have multiple bible translations in a single [Obsidian](https://obsidian.md/) vault.
+By default it will give hashtags to the kind of note.
+
 #### Index Template (`index.md`)
 The main index page of the bible. Available variables:
 - `{version}`: The bible translation version name

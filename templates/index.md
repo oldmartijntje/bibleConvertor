@@ -2,7 +2,7 @@
 aliases:
   - {version}
 tags:
-  - "#bible/index"
+  - "#bible/type/index"
 ---
 # Bible - {version}
 
