@@ -55,7 +55,7 @@ def replaceIndexData(content, book_list, indexData):
     content = replaceKey(content, "source", httpsify(indexData["source"]))
     content = replaceKey(content, "version", indexData["version"])
     createFolderIfNotExist(lowerSpaceless(f"./output/{indexData["version"]}"))
-    writeMarkdown(content, f"bible - {indexData["version"]}.md", lowerSpaceless(indexData["version"]) + "/")
+    writeMarkdown(content, f"Bible - {indexData["version"]}.md", lowerSpaceless(indexData["version"]) + "/")
 
 def lowerSpaceless(string):
     return string.replace(" ", "_").lower()
