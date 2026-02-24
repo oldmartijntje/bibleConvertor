@@ -3,11 +3,12 @@ translation: {version}
 tags:
   - "#bible/chapter"
 aliases:
-  - "{book} - {chapter_number}"
+  - "{book} - {chapter_number} - {version}"
 ---
-[[{book} - {chapter_previous}|<--]] [[{book}]] {chapter_number} [[{book} - {chapter_next}|-->]]
+[[{book} - {chapter_previous}|<--]] {book} - {chapter_number} [[{book} - {chapter_next}|-->]]
 
 Translation: [[bible - {version}|{version}]]
+Book: [[{book}]]
 
 # {book} - {chapter_number}
 

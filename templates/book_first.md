@@ -1,7 +1,7 @@
 ---
 translation: {version}
 aliases:
-  - "{book}"
+  - "{book} - {version}"
 tags:
   - "#bible/book"
 ---

@@ -3,10 +3,11 @@ from pathlib import Path
 import json
 
 class Variation:
-    def __init__(self, first, default, last):
+    def __init__(self, first, default, last, single = None):
         self.first = first
         self.default = default
         self.last = last
+        self.single = single
 
 def writeMarkdown(content, name, appendedPath = ""):
     with open(f"./output/{appendedPath}{name}", "w") as f:
@@ -36,7 +37,7 @@ def replaceIndexData(content, book_list, indexData):
                 ), 
                 "book_chapters", 
                 indexData["books"][x]["chapters"]
-            ) + "\n"
+            )
         else:
             book_list_new = book_list_new + replaceKey(
                 replaceKey(
@@ -54,7 +55,7 @@ def replaceIndexData(content, book_list, indexData):
     content = replaceKey(content, "source", indexData["source"])
     content = replaceKey(content, "version", indexData["version"])
     createFolderIfNotExist(lowerSpaceless(f"./output/{indexData["version"]}"))
-    writeMarkdown(content, "index.md", lowerSpaceless(indexData["version"]) + "/")
+    writeMarkdown(content, f"bible - {indexData["version"]}.md", lowerSpaceless(indexData["version"]) + "/")
 
 def lowerSpaceless(string):
     return string.replace(" ", "_").lower()
@@ -68,7 +69,9 @@ def lookupBook(id, indexData):
 
 def replaceBookData(book_variation, bookData, bookNumber, chapter_list, indexData, chapter_variation, verse_template):
     content = book_variation.default
-    if bookNumber == 0:
+    if bookNumber == 0 and bookNumber + 1 == book_amount:
+        content = book_variation.single
+    elif bookNumber == 0:
         content = book_variation.first
     elif bookNumber + 1 == book_amount:
         content = book_variation.last
@@ -95,7 +98,7 @@ def replaceBookData(book_variation, bookData, bookNumber, chapter_list, indexDat
     content = replaceKey(content, "oude_nieuwe_testament", "oude" if bookNumber + 1 <= old_testament_amount else "nieuwe")
     content = replaceKey(content, "source", bookData["source"])
     createFolderIfNotExist(lowerSpaceless(f"./output/{bookData["version"]}/{bookData["book"]}"))
-    writeMarkdown(content, "index.md", lowerSpaceless(f"{bookData["version"]}/{bookData["book"]}/"))
+    writeMarkdown(content, f"{bookData["book"]}.md", lowerSpaceless(f"{bookData["version"]}/{bookData["book"]}/"))
     for y in range(len(bookData["chapters"])):
         replaceChapterData(chapter_variation, bookData, bookNumber, y+1, verse_template)
 
@@ -103,9 +106,11 @@ def replaceChapterData(chapter_variation, bookData, bookNumber, chapterNumber, v
     chapterData = bookData["chapters"][f"{chapterNumber}"]
     verses = ""
     content = chapter_variation.default
-    if chapterNumber == 0:
+    if chapterNumber == 1 and chapterNumber == len(bookData["chapters"]):
+        content = chapter_variation.single
+    elif chapterNumber == 1:
         content = chapter_variation.first
-    elif chapterNumber + 1 == len(bookData["chapters"]):
+    elif chapterNumber == len(bookData["chapters"]):
         content = chapter_variation.last
     for x in range(len(chapterData)): 
         verses = verses + replaceKey(
@@ -122,6 +127,7 @@ def replaceChapterData(chapter_variation, bookData, bookNumber, chapterNumber, v
             chapterData[x]["verse"]
         )
     content = replaceKey(content, "chapter_text", verses)
+    content = replaceKey(content, "chapter_number", chapterNumber)
     content = replaceKey(content, "book", bookData["book"])
     content = replaceKey(content, "chapter_previous", chapterNumber - 1)
     content = replaceKey(content, "book_previous", lookupBook(bookNumber - 1, indexData))
@@ -187,7 +193,8 @@ for x in range(len(indexData["books"])):
     chapter_variation = Variation(
         readTemplate("chapter_first.md", lambda: missingFile("chapter_first.md", "templates")),
         readTemplate("chapter.md", lambda: missingFile("chapter.md", "templates")),
-        readTemplate("chapter_last.md", lambda: missingFile("chapter_last.md", "templates"))
+        readTemplate("chapter_last.md", lambda: missingFile("chapter_last.md", "templates")),
+        readTemplate("chapter_single.md", lambda: missingFile("chapter_single.md", "templates"))
     )
     replaceBookData(book_variation,
                         bookData, 
