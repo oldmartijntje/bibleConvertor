@@ -179,7 +179,6 @@ newIndex = replaceIndexData(index, readTemplate("book_list.md", lambda: missingF
 for x in range(len(indexData["books"])):
     book = indexData["books"][x]
     bookData = readJsonFile(book["filename"], lambda: missingFile(book["filename"], "bible/"))
-    print(bookData)
     book_variation = Variation(
         readTemplate("book_first.md", lambda: missingFile("book_first.md", "templates")),
         readTemplate("book.md", lambda: missingFile("book.md", "templates")),
