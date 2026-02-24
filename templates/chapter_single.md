@@ -3,6 +3,7 @@ translation: {version}
 tags:
   - "#bible/type/chapter"
   - "#bible/book/{book_lower}"
+  - "#bible/testament/{old_new_testament}"
 aliases:
   - "{book} - {chapter_number} - {version}"
 ---
