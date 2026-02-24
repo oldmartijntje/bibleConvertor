@@ -11,6 +11,10 @@ A good way to gain these json files is by using a tool like [this](https://githu
 
 Keep in mind that you are only allowed to download information that you already own. Piracy is not allowed.
 
+## Adding Custom Books
+
+Want to add additional books beyond the standard books exported via [this](https://github.com/oldmartijntje/BibleDownloader) tool? Check out [CUSTOM_BOOK.md](CUSTOM_BOOK.md) for a detailed guide on how to structure and add custom books to work with this tool.
+
 ## Customization
 
 You can convert your bible.json into your personalised markdown format by editing the template files in the `templates/` folder.
