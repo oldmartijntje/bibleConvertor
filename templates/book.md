@@ -15,3 +15,5 @@ The {book} book has {book_chapters} chapters. It is part of the {old_new_testame
 ## Chapters
 
 {chapter_list}
+---
+# Notes

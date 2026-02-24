@@ -14,3 +14,6 @@ Book: [[{book}]]
 # {book} - {chapter_number}
 
 {chapter_text}
+
+---
+# Notes
