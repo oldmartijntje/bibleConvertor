@@ -122,6 +122,8 @@ def replaceChapterData(chapter_variation, bookData, bookNumber, chapterNumber, v
         content = chapter_variation.last
     verseText = ""
     for x in range(len(chapterData)):
+        if x == 0 and chapterData[1]["text"] in chapterData[0]["text"]:
+            continue
         verseText += chapterData[x]["text"]
         if x + 1 == len(chapterData) or chapterData[x]["verse"] != chapterData[x +1]["verse"]:
             verses = verses + replaceKey(
