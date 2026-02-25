@@ -120,20 +120,24 @@ def replaceChapterData(chapter_variation, bookData, bookNumber, chapterNumber, v
         content = chapter_variation.first
     elif chapterNumber == len(bookData["chapters"]):
         content = chapter_variation.last
-    for x in range(len(chapterData)): 
-        verses = verses + replaceKey(
-            replaceKey(
+    verseText = ""
+    for x in range(len(chapterData)):
+        verseText += chapterData[x]["text"]
+        if x + 1 == len(chapterData) or chapterData[x]["verse"] != chapterData[x +1]["verse"]:
+            verses = verses + replaceKey(
                 replaceKey(
-                    verse_template, 
-                    "verse", 
-                    chapterData[x]["text"]
+                    replaceKey(
+                        verse_template, 
+                        "verse", 
+                        verseText
+                    ), 
+                    "book", 
+                    bookData["book"]
                 ), 
-                "book", 
-                bookData["book"]
-            ), 
-            "verse_number", 
-            chapterData[x]["verse"]
-        )
+                "verse_number", 
+                chapterData[x]["verse"]
+            )
+            verseText = ""
     content = replaceKey(content, "chapter_text", verses)
     content = replaceKey(content, "chapter_number", chapterNumber)
     content = replaceKey(content, "book", bookData["book"])
